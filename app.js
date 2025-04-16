@@ -16,49 +16,33 @@ window.addEventListener("load", () => {
     }, 2000);
 });
 
-const SpeechRecognition =
-    window.SpeechRecognition || window.webkitSpeechRecognition;
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-const recognition = new SpeechRecognition();
+if (SpeechRecognition) {
+    const recognition = new SpeechRecognition();
 
-recognition.continuous = true;
-recognition.interimResults = true;
-recognition.lang = "en-US";
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = "en-US";
 
-recognition.onresult = (event) => {
-    let transcript = "";
-    for (let i = event.resultIndex; i < event.results.length; i++) {
-        if (event.results[i].isFinal) {
-            transcript += event.results[i][0].transcript + " ";
+    recognition.onresult = (event) => {
+        let transcript = "";
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+            if (event.results[i].isFinal) {
+                transcript += event.results[i][0].transcript + " ";
+            }
         }
-    }
+        transcript = transcript.trim();
+        if (transcript) {
+            content.textContent = transcript;
+            takeCommand(transcript.toLowerCase());
+        }
+    };
 
-    transcript = transcript.trim();
-    console.log("Transcript:", transcript); // ✅ এখানে ট্রান্সক্রিপ্ট দেখবে
-
-    if (transcript) {
-        content.textContent = transcript;
-        takeCommand(transcript.toLowerCase());
-    }
-};
-
-
-btn.addEventListener("click", () => {
-    console.log("Button clicked");
-    content.textContent = "🎤 Listening...";
-    recognition.start();
-});
-
-function takeCommand(message) {
-    console.log("Command Received:", message); // Check if the command is received
-    if (message.includes("hello")) {
-        speak("Hello! How are you?");
-    } else if (message.includes("how are you")) {
-        speak("I am doing well, how can I assist you today?");
-    } else if (message.includes("your name")) {
-        speak("My name is Daragaya.");
-    } else {
-        speak("Sorry, I couldn't understand that.");
-    }
+    btn.addEventListener("click", () => {
+        content.textContent = "🎤 Listening...";
+        recognition.start();
+    });
+} else {
+    alert("Speech Recognition is not supported by your browser.");
 }
-
