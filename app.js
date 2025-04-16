@@ -19,7 +19,7 @@ window.addEventListener("load", () => {
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
 if (SpeechRecognition) {
-    const recognition = new SpeechRecognition();
+    const recognition = new SpeechRecognition(); // Create an instance of SpeechRecognition
 
     recognition.continuous = true;
     recognition.interimResults = true;
@@ -46,3 +46,4 @@ if (SpeechRecognition) {
 } else {
     alert("Speech Recognition is not supported by your browser.");
 }
+
